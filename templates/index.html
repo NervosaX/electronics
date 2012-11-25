@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width">
+
+        <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/custom.css">
+
+        <script>
+        function resetForm()
+        {
+            form = $('#searchForm');
+            form.find("[name=name]").val("");
+            form.find("[name=category]").val("");
+            form.find("[name=selectAmperageQuery]").val("");
+            form.find("[name=amperage]").val("");
+            form.find("[name=selectVoltageQuery]").val("");
+            form.find("[name=voltage]").val("");
+            form.find("[name=selectPrefix]").val("");
+            form.find("[name=value]").val("");
+
+            return false;
+        }
+        </script>
+    </head>
+    <body>
+        <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
+
+        <!-- Content  -->
+
+    <div class="wrapper">
+        <div class="nav"><a href="/admin/">Admin</a></div>
+        <br/>
+
+        <h2 style="text-align: center;">Oliver's Electronics</h2>
+        <br/>
+
+        <div class="search">
+            <form class="form-horizontal" method="get" id="searchForm">
+                <div class="control-group">
+                    <label class="control-label" for="inputName">Name</label>
+                    <div class="controls">
+                    <input type="text" id="inputName" name="name" value="{{ form_vals.name|default:"" }}">
+                </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectCategory">Category</label>
+                    <div class="controls">
+                        <select id="selectCategory" name="category">
+                            <option value="">--- Categories ---</option>
+                            {% for category in categories %}
+                                <option value="{{ category.id }}" {% if category.id == form_vals.category %} selected="true"{% endif %}>{{ category.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectAmperageQuery">Amperage</label>
+                    <div class="controls">
+                        <select style="width: 80px;" class="input-mini" name="selectAmperageQuery">
+                            <option value="="{% if form_vals.amperageQuery == "=" %} selected="true"{% endif %}>=</option>
+                            <option value=">"{% if form_vals.amperageQuery == ">" %} selected="true"{% endif %}>></option>
+                            <option value="<"{% if form_vals.amperageQuery == "<" %} selected="true"{% endif %}><</option>
+                        </select>
+                        <input style="width: 124px;" type="text" name="amperage" value="{{ form_vals.amperage|default:"" }}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectVoltageQuery">Voltage</label>
+                    <div class="controls">
+                        <select style="width: 80px;" class="input-mini" name="selectVoltageQuery">
+                            <option value="="{% if form_vals.voltageQuery == "=" %} selected="true"{% endif %}>=</option>
+                            <option value=">"{% if form_vals.voltageQuery == ">" %} selected="true"{% endif %}>></option>
+                            <option value="<"{% if form_vals.voltageQuery == "<" %} selected="true"{% endif %}><</option>
+                        </select>
+                        <input style="width: 124px;" type="text" name="voltage" value="{{ form_vals.voltage|default:"" }}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="selectPrefix">(Prefix) Value</label>
+                    <div class="controls">
+                        <select style="width: 80px;" class="input-mini" name="selectPrefix">
+                            {% for prefix in prefixes %}
+                                <option value="{{ prefix.0 }}"{% if prefix.0 == form_vals.valuePrefix %} selected="true"{% endif %}>{{ prefix.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        <input style="width: 124px;" type="text" name="value" value="{{ form_vals.value|default:"" }}">
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" style="width: 100%;" class="btn">Search</button>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <div class="controls">
+                        <button type="submit" style="width: 100%;" onclick="return resetForm();" class="btn">Clear</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div style="content">
+
+            <table class="table table-hover" style="width: 900px;">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Amperage</th>
+                        <th>Voltage</th>
+                        <th>Value</th>
+                        <th>Quantity</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if items %}
+                        {% for item in items %}
+                        <tr>
+                            <td><a href="#">{{ item.name }}</a></td>
+                            <td>{{ item.category.name }}</td>
+                            <td>{{ item.amperage }}</td>
+                            <td>{{ item.voltage }}</td>
+                            <td>{{ item.value }} {{ item.category_small|safe }}{{ item.category.suffix|safe }}</td>
+                            <td>{{ item.quantity }}</td>
+                        </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" style="text-align: center; padding-top: 60px;">No results</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+                <tfoot class="paginator">
+                    <tr>
+                        <td colspan="6">
+                            {% if items.has_previous %}
+                                <a href="{% url index %}{{ items.previous_link }}"><i class="icon-arrow-left"></i></a>
+                            {% endif %}
+                            {{ items.number }} of {{ items.paginator.num_pages }}
+                            {% if items.has_next %}
+                                <a href="{% url index %}{{ items.next_link }}"><i class="icon-arrow-right"></i></a></td>
+                            {% endif %}
+                    </tr>
+                </tfoot>
+                {{ pageString }}
+            </table>
+
+
+
+        </div>
+        <div style="clear: both;"></div>
+
+    </div>
+
+        <!-- End Content -->
+
+
+        <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+        <script>window.jQuery || document.write('<script src="js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+        <script src="js/plugins.js"></script>
+        <script src="js/main.js"></script>
+
+        <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+        <script>
+            var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
+            (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+            g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+            s.parentNode.insertBefore(g,s)}(document,'script'));
+        </script>
+    </body>
+</html>
