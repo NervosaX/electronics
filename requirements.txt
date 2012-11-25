@@ -1,0 +1,5 @@
+Django==1.4.2
+django-extensions==1.0.1
+ipdb==0.7
+ipython==0.13.1
+pyreadline==2.0-dev1
