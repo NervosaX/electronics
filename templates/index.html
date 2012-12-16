@@ -128,11 +128,11 @@
                         {% for item in items %}
                         <tr>
                             <td><a href="#">{{ item.name }}</a></td>
-                            <td>{{ item.category.name }}</td>
-                            <td>{{ item.amperage }}</td>
-                            <td>{{ item.voltage }}</td>
-                            <td>{{ item.value }} {{ item.category_small|safe }}{{ item.category.suffix|safe }}</td>
-                            <td>{{ item.quantity }}</td>
+                            <td>{{ item.category.name|default:"" }}</td>
+                            <td>{{ item.amperage|default:"" }}</td>
+                            <td>{{ item.voltage|default:"" }}</td>
+                            <td>{{ item.value|default:"" }} {{ item.category_small|safe }}{{ item.category.suffix|safe }}</td>
+                            <td>{{ item.quantity|default:"" }}</td>
                         </tr>
                         {% endfor %}
                     {% else %}

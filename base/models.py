@@ -35,7 +35,8 @@ class ItemCategory(models.Model):
 
     name = models.CharField(max_length=200)
 
-    suffix = models.CharField(max_length=10)
+    suffix = models.CharField(max_length=10,
+        null=True, blank=True)
 
     def __unicode__(self):
         return self.name
