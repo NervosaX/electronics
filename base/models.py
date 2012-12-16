@@ -3,9 +3,9 @@ from django.db import models
 from django.contrib import admin
 
 class ConversionCategory(object):
-    NONE = '1'
-    MEGA = '1000000'
-    KILO = '1000'
+    NONE = '1.0'
+    MEGA = '1000000.0'
+    KILO = '1000.0'
     MILLI = '0.001'
     MICRO = '0.000001'
     NANO = '0.000000001'
@@ -46,8 +46,7 @@ class ItemCategory(models.Model):
 
 class Item(models.Model):
 
-    name = models.CharField(max_length=100,
-        null=True, blank=True)
+    name = models.CharField(max_length=100)
     
     category = models.ForeignKey(
         ItemCategory, related_name='+',
@@ -86,15 +85,22 @@ class Item(models.Model):
 
     @property
     def category_full(self):
-        return dict(ConversionCategory.CHOICES)[self.value_prefix]
+        if self.value_prefix:
+            return dict(ConversionCategory.CHOICES)[self.value_prefix]
+        else:
+            return None
 
     def category_small(self):
-        return dict(ConversionCategory.CHOICES_SMALL)[self.value_prefix]
+        if self.value_prefix:
+            return dict(ConversionCategory.CHOICES_SMALL)[self.value_prefix]
+        else:
+            return None
 
 
     def save(self, *args, **kwargs):
-        decimal_prefix = float(self.value_prefix)
-        self.value_conversion = decimal_prefix * float(self.value)
+        # import ipdb; ipdb.set_trace()
+        if self.value and self.value_prefix:
+            self.value_conversion = float(self.value_prefix) * float(self.value)
         super(Item, self).save(*args, **kwargs)
 
     def __unicode__(self):
