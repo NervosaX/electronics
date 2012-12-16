@@ -95,6 +95,8 @@ class Index(TemplateView):
             if context["form_vals"][val]:
                 urlString += "&%s=%s" % (val, context["form_vals"][val])
 
+
+        
         items.previous_link = "?page=%s%s" % (items.previous_page_number(), urlString)
         items.next_link = "?page=%s%s" % (items.next_page_number(), urlString)
 

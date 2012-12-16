@@ -46,10 +46,12 @@ class ItemCategory(models.Model):
 
 class Item(models.Model):
 
-    name = models.CharField(max_length=100, null=True, blank=True)
+    name = models.CharField(max_length=100,
+        null=True, blank=True)
     
     category = models.ForeignKey(
-        ItemCategory, related_name='+')
+        ItemCategory, related_name='+',
+        null=True, blank=True)
 
     amperage = models.FloatField(
         null=True, blank=True)
