@@ -79,6 +79,9 @@ class Item(models.Model):
     location = models.CharField(
         max_length=200, null=True, blank=True)
 
+    package = models.CharField(
+        max_length=100, null=True, blank=True)
+
     notes = models.TextField(
         max_length=600, null=True, blank=True)
 
