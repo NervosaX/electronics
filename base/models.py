@@ -61,7 +61,8 @@ class Item(models.Model):
 
     value_prefix = models.CharField(max_length=20,
         choices=ConversionCategory.CHOICES, 
-        default=ConversionCategory.NONE)
+        default=ConversionCategory.NONE,
+        blank=True)
 
     value = models.FloatField(
         null=True, blank=True)
