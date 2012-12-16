@@ -9,5 +9,6 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^$', base_views.Index.as_view(), name='index'),
+    url(r'^detail/(?P<id>\d+)/$', base_views.Detail.as_view(), name='detail'),
     url(r'^admin/', include(admin.site.urls)),
 )

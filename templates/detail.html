@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>{{ object.name }}</h2>
+
+<table class="table table-hover" style="width: 900px;">
+    {% if object.category %}
+    <tr>
+        <th width="200">Category</th><td>{{ object.category.name|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.amperage %}
+    <tr>
+        <th width="200">Amperage</th><td>{{ object.amperage|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.voltage %}
+    <tr>
+        <th width="200">Voltage</th><td>{{ object.voltage|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.value %}
+    <tr>
+        <th width="200">Value</th><td>{{ object.value|default:"" }} {{ object.category_small|safe }}{{ object.category.suffix|safe }}</td>
+    </tr>
+    {% endif %}
+    {% if object.category.suffix %}
+    <tr>
+        <th width="200">Converted Value</th><td>{{ object.value_conversion|safe }}</td>
+    </tr>
+    {% endif %}
+    {% if object.quantity %}
+    <tr>
+        <th width="200">Quantity</th><td>{{ object.quantity|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.item_number %}
+    <tr>
+        <th width="200">Item Number</th><td>{{ object.item_number|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.datasheet %}
+    <tr>
+        <th width="200">Datasheet</th><td><a href="{{ object.datasheet|default:""  }}">{{ object.datasheet|default:"" }}</a></td>
+    </tr>
+    {% endif %}
+    {% if object.location %}
+    <tr>
+        <th width="200">Location</th><td>{{ object.location|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.package %}
+    <tr>
+        <th width="200">Package</th><td>{{ object.package|default:"" }}</td>
+    </tr>
+    {% endif %}
+    {% if object.notes %}
+    <tr>
+        <th width="200">Notes</th><td>{{ object.notes|default:"" }}</td>
+    </tr>
+    {% endif %}
+</table>
+{% endblock %}
+

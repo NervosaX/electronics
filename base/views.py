@@ -1,13 +1,14 @@
 from decimal import Decimal
 
+from django.http import Http404
+
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.views.generic import TemplateView
 from base.models import Item, ItemCategory, ConversionCategory
 
 # Use form view
 
-class Index(TemplateView):
-    template_name = "index.html"
+class BaseSearchView(object):
 
     def get_values(self, kwargs):
         vals = {
@@ -31,7 +32,6 @@ class Index(TemplateView):
             vals["voltage"] = float(vals["voltage"])
         if vals["value"]:
             vals["value"] = float(vals["value"])
-
 
         return vals
 
@@ -66,7 +66,7 @@ class Index(TemplateView):
 
 
     def get_context_data(self, *args, **kwargs):
-        context = super(Index, self).get_context_data(
+        context = super(BaseSearchView, self).get_context_data(
             *args, **kwargs)
 
         query = self.query_data(self.request.GET).order_by('name')
@@ -95,9 +95,31 @@ class Index(TemplateView):
             if context["form_vals"][val]:
                 urlString += "&%s=%s" % (val, context["form_vals"][val])
 
-
-        
         items.previous_link = "?page=%s%s" % (items.previous_page_number(), urlString)
         items.next_link = "?page=%s%s" % (items.next_page_number(), urlString)
+
+        return context
+
+
+class Index(BaseSearchView, TemplateView):
+    template_name = "index.html"
+
+
+class Detail(BaseSearchView, TemplateView):
+    template_name = "detail.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super(Detail, self).get_context_data(
+            *args, **kwargs)
+
+        id = kwargs.pop('id')
+        try:
+            item = Item.objects.get(id=id)
+        except:
+            raise Http404
+
+        context.update({
+            "object": item
+        })
 
         return context
